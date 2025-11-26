@@ -180,6 +180,71 @@ alias n8n-url="echo 'https://leah-subpalmated-ai.ngrok-free.dev/home/workflows' 
 alias n8n-open="open https://leah-subpalmated-ai.ngrok-free.dev/home/workflows"
 
 # ============================================
+# MACOS TWEAKS & OPTIMIZATIONS
+# ============================================
+
+# Remove Dock autohide delay
+alias dock-fast="defaults write com.apple.dock autohide-delay -float 0 && killall Dock && echo '✅ Dock delay removed'"
+
+# Restore default Dock delay
+alias dock-normal="defaults delete com.apple.dock autohide-delay && killall Dock && echo '✅ Dock delay restored to default'"
+
+# Apply all macOS optimizations
+mac-optimize() {
+  echo "🚀 Applying macOS optimizations..."
+  echo ""
+
+  echo "⚡️ Removing Dock autohide delay..."
+  defaults write com.apple.dock autohide-delay -float 0
+
+  echo "⚡️ Speeding up Mission Control animations..."
+  defaults write com.apple.dock expose-animation-duration -float 0.1
+
+  echo "⚡️ Enabling App Exposé swipe gesture..."
+  defaults write com.apple.dock showAppExposeGestureEnabled -bool true
+
+  echo "⚡️ Showing hidden files in Finder..."
+  defaults write com.apple.finder AppleShowAllFiles -bool true
+
+  echo "⚡️ Showing file extensions in Finder..."
+  defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+  echo "⚡️ Disabling .DS_Store on network volumes..."
+  defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+
+  echo "⚡️ Enabling snap-to-grid for icons..."
+  /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
+
+  echo ""
+  echo "🔄 Restarting Dock and Finder..."
+  killall Dock
+  killall Finder
+
+  echo ""
+  echo "✅ macOS optimizations applied!"
+  echo ""
+  echo "💡 To revert: mac-restore-defaults"
+}
+
+# Restore default macOS settings
+mac-restore-defaults() {
+  echo "🔄 Restoring default macOS settings..."
+  echo ""
+
+  defaults delete com.apple.dock autohide-delay
+  defaults delete com.apple.dock expose-animation-duration
+  defaults write com.apple.finder AppleShowAllFiles -bool false
+  defaults write NSGlobalDomain AppleShowAllExtensions -bool false
+  defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool false
+
+  killall Dock
+  killall Finder
+
+  echo ""
+  echo "✅ Defaults restored!"
+}
+
+# ============================================
 # MAC MAINTENANCE COMMAND
 # ============================================
 unalias mactain 2>/dev/null  # Remove any existing alias
@@ -319,6 +384,12 @@ zsh-help() {
   echo ""
   echo "🔄 MAINTENANCE"
   echo "  mactain         Run full Mac maintenance"
+  echo ""
+  echo "⚡️ MACOS TWEAKS"
+  echo "  dock-fast       Remove Dock autohide delay (instant show)"
+  echo "  dock-normal     Restore default Dock delay"
+  echo "  mac-optimize    Apply all macOS optimizations"
+  echo "  mac-restore-defaults  Restore all macOS defaults"
   echo ""
   echo "🤖 N8N AUTOMATION"
   echo "  n8n-start       Start n8n with Docker"
