@@ -1,0 +1,40 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Sensitive data
+*.log
+*.env
+.env.local
+.env.*.local
+*_history
+*.secret
+*credentials*
+*password*
+*.pem
+*.key
+*.p12
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Backup files
+*.backup
+*.backup.*
+*.bak
+*.old
+
+# Installation logs
+/tmp/
