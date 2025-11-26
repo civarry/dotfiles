@@ -36,11 +36,6 @@ export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
 
 eval "$(starship init zsh)"
 
-# ngrok completion
-if command -v ngrok &>/dev/null; then
-    eval "$(ngrok completion)"
-fi
-
 # Display system info on terminal start (only in top-level shells)
 if [[ $SHLVL -eq 1 ]]; then
   fastfetch
@@ -124,60 +119,6 @@ alias reload="source ~/.zshrc"
 
 alias serve="python3 -m http.server"
 alias venv="python3 -m venv venv && source venv/bin/activate"
-
-# ============================================
-# ALIASES & FUNCTIONS - N8N
-# ============================================
-
-# ============================================
-# ALIASES & FUNCTIONS - N8N
-# ============================================
-
-n8n-start() {
-  echo "🚀 Starting n8n..."
-  cd ~/n8n-compose && docker compose up -d
-  
-  echo "📡 Starting ngrok in background..."
-  # Kill any existing ngrok session
-  tmux kill-session -t ngrok 2>/dev/null
-  pkill ngrok 2>/dev/null
-  
-  # Start ngrok in a detached tmux session
-  tmux new-session -d -s ngrok "ngrok http 5678"
-  
-  sleep 2
-  echo ""
-  echo "✅ n8n started!"
-  echo "✅ ngrok started in background"
-  echo ""
-  echo "🌐 Access: https://leah-subpalmated-ai.ngrok-free.dev/home/workflows"
-  echo ""
-  echo "💡 Commands:"
-  echo "   • Open in browser: n8n-open"
-  echo "   • View ngrok logs: n8n-ngrok (Ctrl+B, D to exit)"
-  echo "   • Check status: n8n-status"
-  echo "   • Stop everything: n8n-stop"
-}
-
-n8n-stop() {
-  echo "🛑 Stopping n8n..."
-  cd ~/n8n-compose && docker compose stop
-  
-  echo "🛑 Stopping ngrok..."
-  tmux kill-session -t ngrok 2>/dev/null
-  pkill ngrok 2>/dev/null
-  
-  echo ""
-  echo "✅ Everything stopped!"
-}
-
-alias n8n-restart="cd ~/n8n-compose && docker compose restart && echo '✅ n8n restarted!'"
-alias n8n-logs="cd ~/n8n-compose && docker compose logs -f n8n"
-alias n8n-ngrok="tmux attach -t ngrok"
-alias n8n-status="echo '📊 N8N Status:' && docker ps | grep n8n && echo '\n📡 Ngrok Status:' && (tmux ls 2>/dev/null | grep ngrok && echo '✅ Running' || echo '❌ Not running')"
-alias n8n-cd="cd ~/n8n-compose"
-alias n8n-url="echo 'https://leah-subpalmated-ai.ngrok-free.dev/home/workflows' | pbcopy && echo '✅ URL copied to clipboard!\n🌐 https://leah-subpalmated-ai.ngrok-free.dev/home/workflows'"
-alias n8n-open="open https://leah-subpalmated-ai.ngrok-free.dev/home/workflows"
 
 # ============================================
 # MACOS TWEAKS & OPTIMIZATIONS
@@ -274,12 +215,6 @@ mactain() {
   echo ""
   echo "✅ Mac maintenance complete!"
 }
-
-# ============================================
-# Android Emulator
-# ============================================
-
-alias startemu="~/Library/Android/sdk/emulator/emulator -avd Medium_Phone_API_36.1"
 
 # ============================================
 # CUSTOM FUNCTIONS
@@ -391,14 +326,6 @@ zsh-help() {
   echo "  mac-optimize    Apply all macOS optimizations"
   echo "  mac-restore-defaults  Restore all macOS defaults"
   echo ""
-  echo "🤖 N8N AUTOMATION"
-  echo "  n8n-start       Start n8n with Docker"
-  echo "  n8n-stop        Stop n8n"
-  echo "  n8n-restart     Restart n8n"
-  echo "  n8n-logs        View n8n logs (Ctrl+C to exit)"
-  echo "  n8n-status      Check if n8n is running"
-  echo "  n8n-cd          Go to n8n directory"
-  echo ""
   echo "🔍 UTILITIES"
   echo "  h <query>       Search command history"
   echo "  shortcuts       Show this help menu"
@@ -424,8 +351,4 @@ export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 
 # Uncomment to show a tip on startup
 # echo "💡 Tip: Type 'shortcuts' to see all available commands!"
-export PATH="$HOME/.local/bin:$PATH"
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/cjcarito/.lmstudio/bin"
-# End of LM Studio CLI section
 

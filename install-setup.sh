@@ -116,6 +116,7 @@ preflight_checks() {
     echo -e "${YELLOW}Development Tools:${NC}"
     print_info "Python 3.13"
     print_info "Node.js 22"
+    print_info "OpenJDK (required for Spark)"
     echo ""
     echo -e "${YELLOW}Configuration Files:${NC}"
     print_info "~/.zshrc (with ALL your aliases and functions)"
@@ -276,6 +277,7 @@ install_dev_tools() {
 
     print_info "Python 3.13"
     print_info "Node.js 22"
+    print_info "OpenJDK (required for Spark)"
 
     if ! confirm; then
         print_info "Skipping development tools installation"
@@ -305,6 +307,19 @@ install_dev_tools() {
         else
             print_error "Node.js 22 installation failed"
             log_error "Node.js 22 installation failed"
+        fi
+    fi
+
+    # Install OpenJDK
+    if brew list openjdk &>/dev/null; then
+        print_success "OpenJDK already installed"
+    else
+        print_info "Installing OpenJDK..."
+        if brew install openjdk; then
+            print_success "OpenJDK installed successfully"
+        else
+            print_error "OpenJDK installation failed"
+            log_error "OpenJDK installation failed"
         fi
     fi
 }
@@ -404,7 +419,7 @@ finalize() {
     print_success "Oh My Zsh with plugins (autosuggestions, syntax-highlighting)"
     print_success "Starship prompt"
     print_success "CLI tools (fastfetch, bat, eza, fzf, fd)"
-    print_success "Development tools (Python 3.13, Node.js 22)"
+    print_success "Development tools (Python 3.13, Node.js 22, OpenJDK)"
     print_success "All configuration files with your aliases and functions"
     echo ""
     echo -e "${YELLOW}Next steps:${NC}"
